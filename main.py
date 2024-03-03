@@ -1,23 +1,32 @@
 import pygame
 import sys
 from button import ImageButton
-from game import start
+import game
 
 pygame.init()
-pygame.mixer.music.load('sounds/menu_music.mp3')
-pygame.mixer.music.play(-1)
 W, H = 1920, 980
 menu_background = pygame.image.load('images/background_menu.jpg')
-
+pygame.mixer.music.load('sounds/menu_music.mp3')
+pygame.mixer.music.play(-1)
 sc = pygame.display.set_mode((W, H))
-pygame.display.set_caption('Catch a coin|Menu')
 clock = pygame.time.Clock()
 FPS = 60
 
+
+def main_second_start():
+    pygame.mixer.music.load('sounds/menu_music.mp3')
+    pygame.mixer.music.play(-1)
+    main_menu()
+
+
 def main_menu():
-    start_but = ImageButton(W/2-(300/2), 350, 300, 150, '', 'images/start1.png', 'images/start2.png', 'sounds/menu_click.mp3')
-    settings_but = ImageButton(W / 2 - (300 / 2), 500, 300, 150, 'Настройки', 'images/title1.png', 'images/title2.png', 'sounds/menu_click.mp3')
-    exit_but = ImageButton(W / 2 - (300 / 2), 650, 300, 150, 'Выход', 'images/exit1.png', 'images/exit2.png', 'sounds/menu_click.mp3')
+    pygame.display.set_caption('Catch a coin|Menu')
+    start_but = ImageButton(W / 2 - (300 / 2), 350, 300, 150, '', 'images/start1.png', 'images/start2.png',
+                            'sounds/menu_click.mp3')
+    settings_but = ImageButton(W / 2 - (300 / 2), 500, 300, 150, 'Настройки', 'images/title1.png', 'images/title2.png',
+                               'sounds/menu_click.mp3')
+    exit_but = ImageButton(W / 2 - (300 / 2), 650, 300, 150, 'Выход', 'images/exit1.png', 'images/exit2.png',
+                           'sounds/menu_click.mp3')
 
     running = True
     while running:
@@ -26,7 +35,7 @@ def main_menu():
 
         font = pygame.font.SysFont('Arial Black', 72)
         text_surface = font.render('CATCH A COIN', True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=(W/2, 100))
+        text_rect = text_surface.get_rect(center=(W / 2, 100))
         sc.blit(text_surface, text_rect)
 
         for event in pygame.event.get():
@@ -37,7 +46,7 @@ def main_menu():
             try:
                 if event.type == pygame.USEREVENT:
                     if event.button == start_but:
-                        start()
+                        game.start()
 
                 if event.type == pygame.USEREVENT and event.button == settings_but:
                     settings_menu()
@@ -57,10 +66,12 @@ def main_menu():
 
         pygame.display.flip()
 
-def settings_menu():
-    audio_button = ImageButton(W / 2 - (300 / 2), (H/2), 300, 150, '', 'images/sound_but_on.png', 'images/sound_but_off.png', 'sounds/menu_click.mp3')
-    back_button = ImageButton(W / 2 - (100 / 2), 800, 100, 100, '<-', 'images/back_btn1.png', 'images/back_btn2.png', 'sounds/menu_click.mp3')
 
+def settings_menu():
+    audio_button = ImageButton(W / 2 - (300 / 2), (H / 2), 300, 150, '', 'images/sound_but_on.png',
+                               'images/sound_but_off.png', 'sounds/menu_click.mp3')
+    back_button = ImageButton(W / 2 - (100 / 2), 800, 100, 100, '<-', 'images/back_btn1.png', 'images/back_btn2.png',
+                              'sounds/menu_click.mp3')
 
     running = True
     while running:
@@ -96,6 +107,7 @@ def settings_menu():
             btn.draw(sc)
 
         pygame.display.flip()
+
 
 if __name__ == '__main__':
     main_menu()

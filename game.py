@@ -1,11 +1,11 @@
 import pygame
 from random import randint
+from button import ImageButton
+import sys
+import main
 
-pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
 pygame.time.set_timer(pygame.USEREVENT, 2000)
-pygame.mixer.music.load('sounds/music_fon.mp3')
-pygame.mixer.music.play(-1)
 
 s_catch = pygame.mixer.Sound('sounds/catch.mp3')
 
@@ -74,17 +74,42 @@ createBall(balls)
 
 def start():
     pygame.mixer.pre_init(44100, -16, 1, 512)
+    pygame.mixer.music.load('sounds/music_fon.mp3')
+    pygame.mixer.music.play(-1)
+    pygame.mixer.pre_init(44100, -16, 1, 512)
     pygame.init()
     pygame.time.set_timer(pygame.USEREVENT, 2000)
 
     pygame.mixer.music.load('sounds/music_fon.mp3')
     pygame.mixer.music.play(-1)
-    while True:
+    pause_button = ImageButton(1820, 25, 75, 75, '', 'images/pause1.png',
+                               'images/pause2.png', 'sounds/menu_click.mp3')
+    running = True
+    while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                exit()
+                running = False
+                pygame.quit()
+                sys.exit()
             elif event.type == pygame.USEREVENT:
                 createBall(balls)
+
+            try:
+                if event.type == pygame.USEREVENT:
+                    if event.button == pause_button:
+                        # from main import main_second_start
+                        main.main_second_start()
+            except AttributeError:
+                continue
+
+            for btn in [pause_button]:
+                btn.handle_event(event)
+
+        for btn in [pause_button]:
+            btn.check_hover(pygame.mouse.get_pos())
+            btn.draw(sc)
+
+        pygame.display.flip()
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
@@ -107,6 +132,9 @@ def start():
         sc.blit(telega, t_rect)
         pygame.display.update()
         pygame.display.set_caption(f'Catch a coin|Score: {game_score}')
+
+
+
         clock.tick(FPS)
 
         balls.update(H)
